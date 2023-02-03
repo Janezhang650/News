@@ -5,6 +5,15 @@ function tplReplace (template, templateObj) {
   });
 }
 
+// 左右滑动
+function scrollToTop () {
+  setTimeout(() => {
+    window.scrollTo(0, 0)
+  }, 0)
+}
+
+
 export {
-  tplReplace
+  tplReplace,
+  scrollToTop
 }
