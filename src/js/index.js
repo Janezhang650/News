@@ -1,9 +1,24 @@
 import './import';
-import models from '../models';
+import Header from '../components/Header';
 
-async function getNewsList () {
-  const data = await models.getNewsList('top', 10);
-  console.log(data);
-}
+;((doc) => {
 
-getNewsList()
+  const oApp = doc.querySelector('#app');
+
+  const init = () => {
+    render();
+  }
+
+  function render () {
+    const headerTpl = Header.tpl({
+      url: '/',
+      title: '新闻头条',
+      showLeftIcon: false,
+      showRightIcon: true
+    });
+
+    oApp.innerHTML += headerTpl;
+  }
+
+  init();
+})(document);

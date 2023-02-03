@@ -16,7 +16,7 @@ module.exports = {
   entry: {
     index: path.resolve(__dirname, './src/js/index.js'),
     detail: path.resolve(__dirname, './src/js/detail.js'),
-    collections: path.resolve(__dirname, './src/js/collection.js')
+    collection: path.resolve(__dirname, './src/js/collection.js')
   },
   // 输出、打包设置
   output: {
@@ -77,7 +77,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|jpg|jpeg|gif|ico|woff|eot|svg|ttf)$/i,
+        test: /\.(png|jpg|jpeg|gif|ico|woff|woff2|eot|svg|ttf)$/i,
         loader: 'url-loader?limit=1024&name=img/[name]-[hash:16].[ext]'
       }
     ]
