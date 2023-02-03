@@ -3,17 +3,25 @@ import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 
 import { news_type } from '../data';
+import { Models } from '../models';
+
+const models = new Models();
 
 ;((doc) => {
 
   const oApp = doc.querySelector('#app');
 
   const config = {
-    type: 'top'
-  }
+    type: 'top',
+    count: 10
+  };
 
-  const init = () => {
+  // 存储请求回来的新闻数据
+  const newsData = {};
+
+  const init = async () => {
     render();
+    await setNewsList();
     bindEvent();
   }
 
@@ -32,6 +40,19 @@ import { news_type } from '../data';
     const navBarTpl = NavBar.tpl(news_type);
 
     oApp.innerHTML += (headerTpl + navBarTpl);
+  }
+
+  // 按分类存储新闻数据
+  async function setNewsList () {
+    const { type, count } = config;
+
+    // 如果该分类数据已经在之前请求回来了，就不再向服务器发起请求
+    if (newsData[type]) {
+      return;
+    }
+
+    const pageData = await models.getNewsList(type, count);
+    console.log(pageData);
   }
 
   // 导航标签切换状态

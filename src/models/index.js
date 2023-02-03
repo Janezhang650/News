@@ -1,6 +1,7 @@
 import { HTTP } from '../utils/http';
+import { setDataPage } from '../utils/tools';
 
-class Index extends HTTP {
+class Models extends HTTP {
   getNewsList (type, count) {
     return new Promise((resolve, reject) => {
       this.ajax({
@@ -11,7 +12,8 @@ class Index extends HTTP {
           field: type,
         },
         success (data) {
-          resolve(data);
+          const pageData = setDataPage(data.result.data, count);
+          resolve(pageData);
         },
         error (err) {
           reject(err);
@@ -21,4 +23,4 @@ class Index extends HTTP {
   }
 }
 
-export default new Index();
+export { Models };
