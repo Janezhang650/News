@@ -1,1 +1,1 @@
-<div class="news-list" style="top: .{{top}}rem"></div>
+<div class="news-list" style="margin-top: .{{top}}rem"></div>

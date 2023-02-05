@@ -2,6 +2,7 @@ import './import';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import NewsList from '../components/NewsList';
+import PageLoading from '../components/PageLoading';
 
 import { news_type } from '../data';
 import { Models } from '../models';
@@ -32,6 +33,7 @@ const models = new Models();
     NavBar.bindEvent(setType)
   }
 
+  // 模板渲染
   function render () {
     const headerTpl = Header.tpl({
       url: '/',
@@ -65,18 +67,28 @@ const models = new Models();
   async function setNewsList () {
     const { type, count, pageNum } = config;
 
-    // 如果该分类数据已经在之前请求回来了，就不再向服务器发起请求
+    // 如果该分类数据已经在之前请求回来了，就不再向服务器发起请求，直接从缓存池获取数据
     if (newsData[type]) {
+      renderList(newsData[type][pageNum]);
       return;
     }
 
-    newsData[type] = await models.getNewsList(type, count);
-    renderList(newsData[type][pageNum]);
+    oListWrapper.innerHTML = PageLoading.tpl();
+    newsData[type] = await models.getNewsList(type, count); // 向服务器发起请求
+    
+    setTimeout(() => {
+      oListWrapper.innerHTML = '';
+      renderList(newsData[type][pageNum]); // 数据渲染
+    }, 1500);
+
   }
 
-  // 导航标签切换状态
+  // 导航标签切换
   function setType (type) {
-    config.type = type;
+    config.type = type; // 导航标签切换状态
+    config.pageNum = 0;
+    oListWrapper.innerHTML = ''; // 先清空列表容器
+    setNewsList(); // 重新请求数据
   }
 
   init();
