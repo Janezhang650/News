@@ -1,8 +1,11 @@
 import './import';
 import Header from '../components/Header';
+import NewsFrame from '../components/Iframe';
+import { getUrlQueryValue } from '../utils/tools';
 
 ;((doc) => {
   const oApp = doc.querySelector('#app');
+  const currentNews = JSON.parse(localStorage.getItem('currentNews'));
 
   const init = () => {
     render();
@@ -10,13 +13,15 @@ import Header from '../components/Header';
 
   function render () {
     const headerTpl = Header.tpl({
-      url: '/',
+      url: getUrlQueryValue('path'),
       title: '新闻详情',
       showLeftIcon: true,
       showRightIcon: false
     });
 
-    oApp.innerHTML += headerTpl;
+    const newsFrameTpl = NewsFrame.tpl(currentNews.url);
+
+    oApp.innerHTML += (headerTpl + newsFrameTpl);
   }
 
   init();
