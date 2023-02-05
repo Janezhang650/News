@@ -4,7 +4,7 @@ import tpl1 from './tpl/tpl_1.tpl';
 import tpl2 from './tpl/tpl_2.tpl';
 import tpl3 from './tpl/tpl_3.tpl';
 import wrapperTpl from './tpl/wrapper.tpl';
-import { tplReplace } from '../../utils/tools';
+import { getItemNode, tplReplace } from '../../utils/tools';
 
 export default {
   name: 'NewsList',
@@ -57,5 +57,20 @@ export default {
         img.style.opacity = '1';
       }
     })
+  },
+
+  bindEvent (oList, setCurrentNews) {
+    oList.addEventListener('click', this._getToDetail.bind(this, setCurrentNews), false);
+  },
+  _getToDetail (setCurrentNews) {
+    const oItem = getItemNode(arguments[1].target);
+
+    const options = {
+      idx: oItem.dataset.index,
+      pageNum: oItem.dataset.page
+    }
+
+    setCurrentNews(options);
+    window.location.href = `detail.html?path=${location.pathname}`;
   }
 }

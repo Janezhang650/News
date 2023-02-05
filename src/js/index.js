@@ -3,21 +3,25 @@ import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import NewsList from '../components/NewsList';
 import PageLoading from '../components/PageLoading';
+import MoreLoading from '../components/MoreLoading';
 
 import { news_type } from '../data';
 import { Models } from '../models';
+import { scrollToBottom } from '../utils/tools';
 
 const models = new Models();
 
 ;((doc) => {
 
   const oApp = doc.querySelector('#app');
-  let oListWrapper = '';
+  let oListWrapper = '',
+      timer = null;
 
   const config = {
     type: 'top',
     count: 10,
-    pageNum: 0
+    pageNum: 0,
+    isLoading: true
   };
 
   // 存储请求回来的新闻数据
@@ -30,7 +34,9 @@ const models = new Models();
   }
 
   function bindEvent () {
-    NavBar.bindEvent(setType)
+    NavBar.bindEvent(setType);
+    NewsList.bindEvent(oListWrapper, setCurrentNews);
+    window.addEventListener('scroll', scrollToBottom.bind(null, getMoreList), false);
   }
 
   // 模板渲染
@@ -59,7 +65,9 @@ const models = new Models();
       pageNum
     });
 
+    MoreLoading.remove(oListWrapper);
     oListWrapper.innerHTML += newsItemTpl;
+    config.isLoading = false;
     NewsList.imgShow();
   }
 
@@ -87,8 +95,36 @@ const models = new Models();
   function setType (type) {
     config.type = type; // 导航标签切换状态
     config.pageNum = 0;
+    config.isLoading = false;
     oListWrapper.innerHTML = ''; // 先清空列表容器
     setNewsList(); // 重新请求数据
+  }
+
+  // 当滑到列表底部时获取更多数据
+  function getMoreList () {
+    if (!config.isLoading) {
+      config.pageNum ++;
+      clearTimeout(timer);
+      const { pageNum, type } = config;
+
+      if (pageNum >= newsData[type].length) {
+        MoreLoading.add(oListWrapper, false);
+      } else {
+        config.isLoading = true;
+        MoreLoading.add(oListWrapper, true);
+        timer = setTimeout(() => {
+          setNewsList();
+        }, 1000);
+      }
+    }
+  }
+
+  function setCurrentNews (options) {
+    const { idx, pageNum } = options;
+
+    const currentNews = newsData[config.type][pageNum][idx];
+
+    localStorage.setItem('currentNews', JSON.stringify(currentNews));
   }
 
   init();
