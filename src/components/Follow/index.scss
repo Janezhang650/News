@@ -1,0 +1,15 @@
+.follow {
+  position: fixed;
+  top: .1rem;
+  right: .15rem;
+  font-size: .22rem;
+  z-index: 3;
+
+  &.icon-star-o {
+    color: #fff;
+  }
+
+  &.icon-star {
+    color: #FFD700;
+  }
+}

@@ -82,7 +82,9 @@ const models = new Models();
     }
 
     oListWrapper.innerHTML = PageLoading.tpl();
-    newsData[type] = await models.getNewsList(type, count); // 向服务器发起请求
+
+    // 向服务器发起请求
+    newsData[type] = await models.getNewsList(type, count);
     
     setTimeout(() => {
       oListWrapper.innerHTML = '';

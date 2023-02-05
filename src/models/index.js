@@ -15,8 +15,8 @@ class Models extends HTTP {
           const pageData = setDataPage(data.result.data, count);
           resolve(pageData);
         },
-        error (err) {
-          reject(err);
+        error (error) {
+          reject(error)
         }
       })
     })

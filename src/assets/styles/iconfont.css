@@ -13,7 +13,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-collection:before {
+.icon-star:before {
   content: "\e6a5";
 }
 
